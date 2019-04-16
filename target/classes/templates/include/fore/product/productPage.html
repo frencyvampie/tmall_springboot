@@ -1,0 +1,67 @@
+<div th:fragment="html">
+    <script>
+       $(function(){
+    	  var pid=getUrlParms("pid");
+    	  var data4Vue={
+    			  //想想哪里需要渲染这些数据，想想这些数据怎么从response.data取回
+    			  uri:'foreproduct',
+    			  p:'',
+    			  category:null,
+                  firstProductImage:null,
+                  pvs:[],
+                  reviews:[],
+                  showDetail:true,
+                  showReview:false,
+                  user:{name:'', password:''}
+    	  };
+    	  
+    	  var vue=new Vue({
+    		 el:'#workingArea',
+    		 data:data4Vue,
+    		 mounted:function(){
+    			 linkDefaultActions();
+    			 this.load();
+    		 },
+    		 methods:{
+    			 load:function(){
+    				 var url=this.uri+"/"+pid;
+    				 axios.get(url).then(function(response){
+    					 //result映射会Result.java的话，是个Result(SUCCESS_CODE,"",data)
+    					 //关注它的属性data，映射回map是有3个key的
+    					 var result=response.data;
+    					 vue.p=result.data.product;
+    					 vue.pvs=result.data.pvs;
+    					 vue.reviews=result.data.reviews;
+    					 //回想下，这样就能取到产品的category值？pojo的@JoinColumn(name="cid")?
+    					 vue.category = vue.p.category;
+    					 //这里是product()有个逻辑设置了
+    					 vue.firstProductImage = vue.p.firstProductImage;
+    					 //所有元素加载完毕后，调用监听函数imgAndInfoPageRegisterListeners(vue)
+    					 vue.$nextTick(function(){
+    						 imgAndInfoPageRegisterListeners(vue);
+    					 })
+    				 });
+    			 },
+    		     toggle2Detail:function(){
+                       this.showDetail=true;
+                       this.showReview=false;
+                 },
+                 toggle2Review:function(){
+                       this.showDetail=false;
+                       this.showReview=true;
+                 }
+    		 }
+    	  });
+       });
+    </script>
+ 
+    <title>模仿天猫官网 -- {{p.name}}</title>
+    <div class="categoryPictureInProductPageDiv">
+        <img v-if="category!=null" class="categoryPictureInProductPage" :src="'img/category/'+category.id+'.jpg'">
+    </div>
+    <div class="productPageDiv">
+        <div th:replace="include/fore/product/imgAndInfo::html" ></div>
+        <div th:replace="include/fore/product/productReview::html" ></div>
+        <div th:replace="include/fore/product/productDetail::html" ></div>
+    </div>
+</div>

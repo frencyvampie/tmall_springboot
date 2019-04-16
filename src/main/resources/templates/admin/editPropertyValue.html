@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/admin/adminHeader::html('产品属性管理')">
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:replace="include/admin/adminNavigator::html" ></div>
+<script>
+	$(function(){
+		var pid=getUrlParms("pid");
+		var data4Vue={
+			uri:'propertyValues',	
+			beans:[],
+			product:'',
+			category:''
+		};
+		var vue=new Vue({
+			el:"#workingArea",
+			data:data4Vue,
+			mounted:function(){
+				this.getProduct(pid);
+				this.list();
+			},
+			methods:{
+				getProduct:function(pid){
+					var url="products/"+pid;
+					axios.get(url).then(function(response){
+						vue.product=response.data;
+						//因为是在pojo上@JoinColumn(name="cid")注解了category属性，所以必定有值
+						vue.category=vue.product.category;
+					});
+				},
+				list:function(){
+					var url="products/"+pid+"/"+this.uri;
+					axios.get(url).then(function(response){
+						vue.beans=response.data;
+					});	
+				},
+				update:function(bean){
+					var url=this.uri;
+					//这里bean是通过v-for遍历出来的，是json数据beans的每一个对象，有各种属性值
+					var id=bean.id;
+					$("#pvid"+bean.id).css("border","2px solid yellow");
+					axios.put(url,bean).then(function(response) {
+                        if(bean.id==response.data.id)
+                            $("#pvid"+bean.id).css("border","2px solid green");
+                        else
+                            $("#pvid"+bean.id).css("border","2px solid red");
+					});
+				}
+			}
+		});
+	});
+</script>
+
+<div id="workingArea" >
+    <ol class="breadcrumb">
+        <li><a href="admin_category_list">所有分类</a></li>
+        <li><a :href="'admin_product_list?cid='+category.id">{{category.name}}</a></li>
+        <li class="active">{{product.name}}</li>
+        <li class="active">产品属性管理</li>
+    </ol>
+ 
+    <div class="editPVDiv">
+        <div v-for="bean in beans" class="eachPV">
+            <span class="pvName" >{{bean.property.name}}</span>
+            <span class="pvValue"><input class="pvValue" :id="'pvid'+bean.id" type="text" v-model="bean.value" @keyup="update(bean)"></span>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+ 
+</div>
+ 
+<div th:replace="include/admin/adminFooter::html" ></div>
+</body>
+</html>
