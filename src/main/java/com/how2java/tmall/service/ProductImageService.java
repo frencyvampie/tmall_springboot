@@ -57,6 +57,7 @@ public class ProductImageService {
 		ProductImageService productImageService=SpringContextUtil.getBean(ProductImageService.class);
 		List<ProductImage> singleImages = productImageService.listSingleProductImages(product);
 		if(!singleImages.isEmpty()) {
+			//这个是Product的属性
 			product.setFirstProductImage(singleImages.get(0));
 		}
 		else

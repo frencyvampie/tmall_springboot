@@ -31,6 +31,7 @@
 						
 						axios.post(url,this.user).then(function(response){
 							var result=response.data;
+							//返回的Result.success()的对象
 							if(result.code==0){
 								location.href="home";
 							}
@@ -66,6 +67,7 @@
                     <span class="loginInputIcon ">
                         <span class=" glyphicon glyphicon-user"></span>
                     </span>
+                <!-- v-model双向绑定 -->
                 <input v-model="user.name" placeholder="手机/会员名/邮箱" type="text">
             </div>
             

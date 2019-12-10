@@ -25,15 +25,20 @@
             },
             methods: {
                 getCategory:function(cid){
+                	//CategoryContoller.@GetMapping("/categories/{id}")
                     var url = "categories/"+cid;
                     axios.get(url).then(function(response) {
+                    	//返回这个属性对应的category
                         vue.category = response.data;
                     })
                 },
                 list:function(start){
+                	//PropetyController.@GetMapping("/categories/{cid}/properties")
                     var url =  "categories/"+cid+"/"+this.uri+"?start="+start;
                     axios.get(url).then(function(response) {
+                    	//后台服务方法返回一个Page4Navigator<Property>对象
                         vue.pagination = response.data;
+                    	//取出对象的内容，在下面的<tr v-for="bean in beans ">进行渲染
                         vue.beans = response.data.content	;
                     });
                 },

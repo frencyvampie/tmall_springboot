@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "product")
 @JsonIgnoreProperties({ "handler","hibernateLazyInitializer"})
+//告诉这个pojo怎么匹配es，这个index就好比是数据库，type相当于数据表，相当于建立了数据库和表，将数据库中的数据保存在里面
 @Document(indexName = "tmall_springboot",type = "product")
 public class Product {
     @Id
@@ -37,6 +38,8 @@ public class Product {
 	private float promotePrice;
 	private int stock;
 	private Date createDate;
+	
+	//产品管理页面的产品图片缩略图
 	@Transient
 	private ProductImage firstProductImage;
 	@Transient

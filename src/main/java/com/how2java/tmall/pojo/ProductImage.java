@@ -21,10 +21,12 @@ public class ProductImage {
 	@Column(name="id")
 	private int id;
 	
+	//这个属性，在表是找不到映射的字段，但又有获得product实例的需求，可以这里理解 product属性-表的外键pid-主表特定id记录-该记录映射java的实例
 	@ManyToOne
 	@JoinColumn(name="pid")
 	@JsonBackReference
 	private Product product;
+	
 	private String type;
 
 	public int getId() {

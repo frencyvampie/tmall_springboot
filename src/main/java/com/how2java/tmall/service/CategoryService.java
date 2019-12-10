@@ -18,15 +18,17 @@ import com.how2java.tmall.dao.CategoryDAO;
 import com.how2java.tmall.pojo.Category;
  
 @Service
+//指定本类下的所有方法的返回值，都保存在"categories"的缓存空间
 @CacheConfig(cacheNames="categories")
 public class CategoryService {
     @Autowired CategoryDAO categoryDAO;
     
+    //将方法的返回对象缓存进key为categories-page-0-5
     @Cacheable(key="'categories-page-'+#p0+'-'+#p1")
     public Page4Navigator<Category> list(int start, int size, int navigatePages) {
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable = new PageRequest(start, size,sort);
-        Page pageFromJPA =categoryDAO.findAll(pageable);
+        Page<Category> pageFromJPA =categoryDAO.findAll(pageable);
  
         return new Page4Navigator<>(pageFromJPA,navigatePages);
     }
@@ -37,7 +39,7 @@ public class CategoryService {
         return categoryDAO.findAll(sort);
     }
     
-    
+    //执行本方法清空本缓存空间的所有key，也就是对象category写入数据库，然后清空所有key（这里没有用@CachePut）
     @CacheEvict(allEntries=true)
 //	@CachePut(key="'category-one-'+ #p0")
     public void add(Category bean) {

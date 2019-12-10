@@ -33,6 +33,7 @@ public class PropertyValueController {
 	
 	@PutMapping("/propertyValues")
 	//前端提交一个不附带任何参数的url，一个bean
+	//axios.put(url,bean)
 	public Object updata(@RequestBody PropertyValue bean) throws Exception{
 		propertyValueService.update(bean);
 		return bean;

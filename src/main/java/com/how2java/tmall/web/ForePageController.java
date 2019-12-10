@@ -6,7 +6,13 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
- 
+
+/**
+ * 这个类是将输入url定位视图名
+ * @author Administrator
+ *
+ */
+
 @Controller
 public class ForePageController {
     @GetMapping(value="/")

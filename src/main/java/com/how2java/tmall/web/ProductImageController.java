@@ -32,11 +32,12 @@ public class ProductImageController {
 	ProductService productService;
 	
 	@GetMapping("/products/{pid}/productImages")
-	//因为type是其他参数，按照restful风格，用@RequestParam
+	//因为type是附带在?之后其他参数，按照restful风格，用@RequestParam,不用@PathVariable
 	public List<ProductImage> list(@RequestParam("type")String type,
 									@PathVariable("pid")int pid) throws Exception{
 		Product product=productService.get(pid);
 		
+		//如果前端请求的附带参数是single
 		if(ProductImageService.type_single.equals(type)) {
 			List<ProductImage> singles=productImageService.listSingleProductImages(product);
 			return singles;
@@ -46,6 +47,7 @@ public class ProductImageController {
             return details;
 		}
 		else {
+			//直接返回一个列表实例，但其元素均为null
 			return new ArrayList<>();
 		}
 	}
@@ -61,8 +63,13 @@ public class ProductImageController {
         Product product = productService.get(pid);
         bean.setProduct(product);
         bean.setType(type);
-         
+        
+        //将添加到数据库库
         productImageService.add(bean);
+        
+        /**
+         * 函数剩余部分是创建文件、复制
+         */
         String folder = "img/";
         if(ProductImageService.type_single.equals(bean.getType())){
         	//其实等于 String folder="img/productSingle";
@@ -71,6 +78,7 @@ public class ProductImageController {
         else{
             folder +="productDetail";
         }
+        //E:\java\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\testweb\
         File  imageFolder= new File(request.getServletContext().getRealPath(folder));
         //准备好了destination的file对象，文件名字是手动创建ProductImage对象的id
         File file = new File(imageFolder,bean.getId()+".jpg");
@@ -85,7 +93,8 @@ public class ProductImageController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //没搞懂这2个f_small、f_middle的作用；这里是将路径.../img/productSingle的file对象转换位2个尺寸
+        //没搞懂这2个f_small、f_middle的作用；这里是将路径.../img/productSingle的file对象转为2个尺寸，并保存在/..img/productSingle_small和productSingle_middle下
+        //前端是调用哪个src？src="'img/productSingle/'+pi.id+'.jpg'"
         if(ProductImageService.type_single.equals(bean.getType())){
             String imageFolder_small= request.getServletContext().getRealPath("img/productSingle_small");
             String imageFolder_middle= request.getServletContext().getRealPath("img/productSingle_middle");    

@@ -15,23 +15,26 @@
             <div class="rightMenu">
                 <span><a href=""><img src="img/site/chaoshi.png"/></a></span>
                 <span><a href=""><img src="img/site/guoji.png"/></a></span>
-
+				
+				<!-- 取出所有分类的，但限定展示前4个 -->
                 <span v-for="c,index in categories" v-if='index<=3'>
 						<a :href="'category?cid='+c.id">{{c.name}}</a>
 					</span>
             </div>
 
         </div>
-
+		
+		<!-- 引入17个纵向分类 -->
         <div style="position: relative">
             <div th:replace="include/fore/home/categoryMenu::html" ></div>
         </div>
-
+		
+		<!-- 引入每个分类的产品（标题） -->
         <div style="position: relative;left: 0;top: 0;">
             <div th:replace="include/fore/home/productsAsideCategorys::html" ></div>
         </div>
 
-
+		<!-- 引入轮播图 -->
         <div th:replace="include/fore/home/carousel::html" ></div>
 
 

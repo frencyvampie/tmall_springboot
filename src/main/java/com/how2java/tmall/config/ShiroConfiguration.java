@@ -26,19 +26,22 @@ public class ShiroConfiguration {
     }
      
     @Bean
+    //Bean注解在返回实例的方法上，如果未通过@Bean指定bean的名称，则默认与标注的方法名相同
     public SecurityManager securityManager(){
         DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
         securityManager.setRealm(getJPARealm());
         return securityManager;
     }
- 
+    
+    //指定了JpaRealm这个类作为shiro的域，并且使用二次加密salt
     @Bean
     public JPARealm getJPARealm(){
         JPARealm myShiroRealm = new JPARealm();
         myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return myShiroRealm;
     }
- 
+    
+    //二次加密salt
     @Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher(){
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();

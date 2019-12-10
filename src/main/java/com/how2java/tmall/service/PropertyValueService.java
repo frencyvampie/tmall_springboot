@@ -38,9 +38,10 @@ public class PropertyValueService {
 	
 	/*
 	 * 初始化:因为对于PropertyValue的管理，没有增加，只有修改。 
-	 * 所以需要通过初始化来进行自动地增加，以便于后面的修改
+	 * 所以需要通过初始化来进行手动增加，以便于后面的修改
 	 */
 	public void init(Product product) {
+		//因为入口连接只传了pid
 		List<Property> propertys=propertyService.findByCategory(product.getCategory());
 		PropertyValueService propertyValueService = SpringContextUtil.getBean(PropertyValueService.class);
 		for(Property property:propertys) {

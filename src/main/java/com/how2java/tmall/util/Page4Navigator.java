@@ -3,9 +3,12 @@ package com.how2java.tmall.util;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
- 
+
+//泛型，注意这个类实例后对象，类似一个Page的集合，T就是要确定传入这个集合的java类型一致
 public class Page4Navigator<T> {
+	
     Page<T> pageFromJPA;
+    
     int navigatePages;
      
     int totalPages;
@@ -37,7 +40,9 @@ public class Page4Navigator<T> {
     }
      
     public Page4Navigator(Page<T> pageFromJPA,int navigatePages) {
+    	//把dao来的Page<T>构建本类的实例
         this.pageFromJPA = pageFromJPA;
+        
         this.navigatePages = navigatePages;
          
         totalPages = pageFromJPA.getTotalPages();
@@ -49,6 +54,7 @@ public class Page4Navigator<T> {
         size = pageFromJPA.getSize();
          
         numberOfElements = pageFromJPA.getNumberOfElements();
+        
         //返回Page<T>的泛型T的list集合，如果是Page<Order>,则返回List<Order> 
         content = pageFromJPA.getContent();
          
@@ -65,7 +71,9 @@ public class Page4Navigator<T> {
         calcNavigatepageNums();
          
     }
- 
+    /**
+     * 计算分页栏有多少个，并用数组
+     */
     private void calcNavigatepageNums() {
         int navigatepageNums[];
         int totalPages = getTotalPages();

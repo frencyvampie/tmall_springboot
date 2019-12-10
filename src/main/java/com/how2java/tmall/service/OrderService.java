@@ -73,8 +73,9 @@ public class OrderService {
     	}
     }
     
-  //开启事务管理？？？
+  
     @CacheEvict(allEntries=true)
+    //开启事务管理
   	@Transactional(propagation=Propagation.REQUIRED,rollbackForClassName="Exception")
   	public float add(Order order,List<OrderItem> ois) {
   		float total=0;

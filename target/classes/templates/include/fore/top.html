@@ -8,6 +8,7 @@
  
     <span th:if="${null!=session.user}">
         <a href="login" th:text="${session.user.name}"></a>
+        <!-- @GetMapping("/forelogout")，处理这个http://127.0.0.1:8080/tmall_springboot/forelogout -->
         <a href="forelogout" >退出</a>
     </span>
  

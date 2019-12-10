@@ -5,7 +5,7 @@
         		uri:'foreregister',
         		//???
         		result:[],
-        		//将要v-model
+        		//双向绑定v-model
         		user:{name:'',password:'',repeatpassword:''}
         	};
         	
@@ -23,6 +23,8 @@
         				if(0==this.user.name.length){
         					$("span.errorMessage").html("请输入用户名");
         					$("div.registerErrorMessageDiv").css("visibility","visible");
+        					//不再往下执行
+        					return;
         				}
                         if(0==this.user.password.length){
                             $("span.errorMessage").html("请输入密码");
@@ -40,9 +42,11 @@
                             $("div.registerErrorMessageDiv").css("visibility","visible");
                             return;
                         }
+                        //
                         axios.post(url,this.user).then(function(response){
                         	//控制层返回的是Result.fail(message)或者Result.success()对象，回顾这个对象的属性
                         	var result=response.data;
+                        	//注册成功，跳转页面
                         	if(result.code==0){
                         		location.href="registerSuccess";
                         	}
@@ -71,6 +75,7 @@
             </tr>
             <tr>
                 <td class="registerTableLeftTD">登陆名</td>
+                <!-- v-model,将表单数据与vue的参数双向绑定 -->
                 <td  class="registerTableRightTD"><input v-model="user.name" placeholder="会员名一旦设置成功，无法修改" > </td>
             </tr>
             <tr>

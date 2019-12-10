@@ -16,6 +16,12 @@ import com.how2java.tmall.pojo.User;
 import com.how2java.tmall.service.CategoryService;
 import com.how2java.tmall.service.OrderItemService;
 
+
+/**
+ * 其实如果所有路径都要经过这个拦截器，都会执行posthandle方法，都会有数据库查询，带来查询压力;而且路径是静态资源的话
+ * @author Administrator
+ *
+ */
 public class OtherInterceptor implements HandlerInterceptor {
 	@Autowired
 	OrderItemService orderItemService;

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
+<!-- 引用头文件js，内有各种判定函数 -->
 <head th:include="include/admin/adminHeader::html('分类管理')" ></head>
 <body>
+<!-- 引用导航栏公共html片段 -->
 <div th:replace="include/admin/adminNavigator::html" ></div>
 <script>
     $(function(){
@@ -18,7 +19,8 @@
         var vue = new Vue({
             el: '#workingArea',
             data: data4Vue,
-            mounted:function(){ //mounted　表示这个 Vue 对象加载成功了
+            //加载Vue对象成功之后会调用
+            mounted:function(){ 
                 this.list(0);
             },
             methods: {
@@ -27,7 +29,7 @@
                   //CategoryConroller.@GetMapping("/categories"),返回类型Page4Navigator<Category>
                     axios.get(url).then(function(response) {
                         vue.pagination = response.data;
-                        vue.beans = response.data.content	;
+                        vue.beans = response.data.content;
                     });
                 },
                 add: function () {
@@ -43,7 +45,9 @@
                     formData.append("name", this.bean.name);
                     //@PostMapping("/categories"),返回类型为Object
                     axios.post(url,formData).then(function(response){
+                    	
                         vue.list(0);
+                        //vue.data的数据清空工作
                         vue.bean = { id: 0, name: '', hp: '0'};
                         $("#categoryPic").val('');
                         vue.file = null;
@@ -63,6 +67,7 @@
                         }
                     });
                 },
+                ////将上传文件的参数对象 保存到 组件的data属性对象（其中的file属性）中。 
                 getFile: function (event) {
                     this.file = event.target.files[0];
                 },
@@ -119,7 +124,10 @@
             </tbody>
         </table>
     </div>
+    <!-- 引入分页栏 -->
     <div th:replace="include/admin/adminPage::html" ></div>
+    
+    <!-- 增加类别的表单 -->
     <div class="panel panel-warning addDiv">
         <div class="panel-heading">新增分类</div>
         <div class="panel-body">
@@ -143,6 +151,7 @@
         </div>
     </div>
 </div>
+<!-- 引入页脚 -->
 <div th:replace="include/admin/adminFooter::html" ></div>
 </body>
 </html>

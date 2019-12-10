@@ -27,7 +27,7 @@
     				 var url=this.uri+"/"+pid;
     				 axios.get(url).then(function(response){
     					 //result映射会Result.java的话，是个Result(SUCCESS_CODE,"",data)
-    					 //关注它的属性data，映射回map是有3个key的
+    					 //java返回一个Result(map),map是有3key：product、pvs、reviews
     					 var result=response.data;
     					 vue.p=result.data.product;
     					 vue.pvs=result.data.pvs;
@@ -61,7 +61,9 @@
     </div>
     <div class="productPageDiv">
         <div th:replace="include/fore/product/imgAndInfo::html" ></div>
+        <!-- 引入商品累计评价页面 -->
         <div th:replace="include/fore/product/productReview::html" ></div>
+        <!-- 引入商品详情页面 -->
         <div th:replace="include/fore/product/productDetail::html" ></div>
     </div>
 </div>

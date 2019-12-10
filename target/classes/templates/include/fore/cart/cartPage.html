@@ -30,26 +30,33 @@
      
         var deleteOrderItem = false;
         var deleteOrderItemid = 0;
+        
+        
         function cartPageRegisterListeners(){
+        	
             $("a.deleteOrderItem").click(function(){
                 deleteOrderItem = false;
                 var oiid = $(this).attr("oiid")
                 deleteOrderItemid = oiid;
                 $("#deleteConfirmModal").modal('show');   
             });
+            
             $("button.deleteConfirmButton").click(function(){
                 deleteOrderItem = true;
                 $("#deleteConfirmModal").modal('hide');
             });
-             
+            
+            //删除按钮事件
             $('#deleteConfirmModal').on('hidden.bs.modal', function (e) {
                 if(deleteOrderItem){
                      
                     var url = "foredeleteOrderItem?oiid="+deleteOrderItemid;
                     axios.get(url).then(function(response){
                         if(0==response.data.code){
+                        	//直接将删除的dom隐藏
                             $("tr.cartProductItemTR[oiid="+deleteOrderItemid+"]").hide();
                         }
+                        //如果后台返回不是result.success()，则跳回登录页
                         else{
                             location.href="login";
                         }
@@ -98,6 +105,7 @@
                  
             });
              
+            
             $(".orderItemNumberSetting").keyup(function(){
                 var pid=$(this).attr("pid");
                 var stock= $("span.orderItemStock[pid="+pid+"]").text();
@@ -138,7 +146,8 @@
                     num=1;
                 syncPrice(pid,num,price);
             });
-             
+            
+            //对于结算按钮
             $("button.createOrderButton").click(function(){
                 var params = "";
                 $(".cartProductItemIfSelected").each(function(){
@@ -148,6 +157,7 @@
                     }
                 });
                 params = params.substring(1);
+                //提交到付款结算页面，并附带多个oiid=2&oiid=1这样的参数
                 location.href="buy?"+params;
             });
         }
@@ -203,6 +213,7 @@
             $("span.cartTitlePrice").html("￥"+formatMoney(sum));
             $("span.cartSumNumber").html(totalNumber);
         }
+        
         function syncPrice(pid,num,price){
             $(".orderItemNumberSetting[pid="+pid+"]").val(num);
             var cartProductItemSmallSumPrice = formatMoney(num*price);
@@ -232,8 +243,7 @@
                     <tr>
                         <th class="selectAndImage">
                                 <img selectit="false" class="selectAllItem" src="img/site/cartNotSelected.png">              
-                        全选
-                         
+                       		 全选                    
                         </th>
                         <th>商品信息</th>
                         <th>单价</th>
@@ -243,6 +253,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                		<!-- 在第一个tr上写v-for -->
                         <tr :oiid="oi.id" class="cartProductItemTR" v-for="oi in orderItems">
                             <td>
                                 <img selectit="false" :oiid="oi.id" class="cartProductItemIfSelected" src="img/site/cartNotSelected.png">

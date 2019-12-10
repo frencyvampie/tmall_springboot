@@ -18,13 +18,14 @@ import java.io.IOException;
 public class CategoryController {
 	@Autowired CategoryService categoryService;
 
+	//接受来自admin/categories的视图提交的axios.get(url).then(function(response)
 	@GetMapping("/categories")
 	public Page4Navigator<Category> list(@RequestParam(value = "start", defaultValue = "0") int start, @RequestParam(value = "size", defaultValue = "5") int size) throws Exception {
 		start = start<0?0:start;
 		Page4Navigator<Category> page =categoryService.list(start, size, 5);  //5表示导航分页最多有5个，像 [1,2,3,4,5] 这样
 		return page;
 	}
-
+	//处理增加新的分类的url请求
 	@PostMapping("/categories")
 	public Object add(Category bean, MultipartFile image, HttpServletRequest request) throws Exception {
 		categoryService.add(bean);
@@ -33,12 +34,14 @@ public class CategoryController {
 	}
 	public void saveOrUpdateImageFile(Category bean, MultipartFile image, HttpServletRequest request)
 			throws IOException {
+		//将上传文件在项目的位置定位
 		File imageFolder= new File(request.getServletContext().getRealPath("img/category"));
 		File file = new File(imageFolder,bean.getId()+".jpg");
 		if(!file.getParentFile().exists())
 			file.getParentFile().mkdirs();
 		image.transferTo(file);
 		BufferedImage img = ImageUtil.change2jpg(file);
+		//写入到java程序
 		ImageIO.write(img, "jpg", file);
 	}
 
@@ -48,12 +51,14 @@ public class CategoryController {
 		File  imageFolder= new File(request.getServletContext().getRealPath("img/category"));
 		File file = new File(imageFolder,id+".jpg");
 		file.delete();
+		//返回 null, 会被RESTController 转换为空字符串
 		return null;
 	}
 
 	@GetMapping("/categories/{id}")
 	public Category get(@PathVariable("id") int id) throws Exception {
 		Category bean=categoryService.get(id);
+		//并转换为json对象发给浏览器
 		return bean;
 	}
 

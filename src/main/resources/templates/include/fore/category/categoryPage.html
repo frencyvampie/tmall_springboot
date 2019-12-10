@@ -17,7 +17,7 @@
 				},
 				methods:{
 					load:function(){
-						//把地址栏的sort参数付给vue的数据
+						//把变量sort（来自于地址栏）的值付给vue.sort
 						this.sort=sort;
 						//由于cid是资源，sort是附带参数，所以url的写法不一样
 						var url=this.uri+"/"+cid+"?sort="+sort;

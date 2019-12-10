@@ -8,6 +8,6 @@ import com.how2java.tmall.pojo.Product;
 import com.how2java.tmall.pojo.ProductImage;
 
 public interface ProductImageDAO extends JpaRepository<ProductImage, Integer> {
-	//根据产品和图片类型，返回特定的图片集合
+	//寻找ProductImage这是实例，根据实例的product和type属性，返回一个这个实例列表
 	public List<ProductImage> findByProductAndTypeOrderByIdDesc(Product product, String type);
 }

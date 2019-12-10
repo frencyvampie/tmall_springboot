@@ -20,6 +20,11 @@ public class OrderItem {
 	@Column(name="id")
 	private int id;
 	
+	/**
+	 * 回顾表关系设计，多个orderItem对应1个product，所以在表orderItem设计外键pid
+	 * 这里用@JoinColumn映射pojo的product属性，理解为本pojo的product属性是有完整的一个product记录，pojo.product.id=xxx,是能取到值的
+	 * 
+	 */
 	@ManyToOne
 	@JoinColumn(name="pid")
 	private Product product;

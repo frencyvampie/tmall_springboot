@@ -17,10 +17,10 @@
                 },       
                 methods: {     
                     load:function(){
-                    	//还有这种写法？
+                    	
                         var url =  this.uri+"?oiid="+oiid;
                         axios.get(url).then(function(response) {
-                        	//response.data返回的是new Result(SUCCESS_CODE,"",data)
+                        	//response.data返回的是new Result(map)
                             var result = response.data;
                         	//看清楚是result.data
                             vue.total = result.data.total;

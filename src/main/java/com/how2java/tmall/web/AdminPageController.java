@@ -3,6 +3,12 @@ package com.how2java.tmall.web;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
+/**
+ * 此类作为将输入的url，跳转到对应的视图名
+ * @author Administrator
+ *
+ */
 @Controller
 public class AdminPageController {
 	@GetMapping(value="/admin")
@@ -12,6 +18,7 @@ public class AdminPageController {
 
 	@GetMapping(value="/admin_category_list")
 	public String listCategory(){
+		//返回一个String的视图名
 		return "admin/listCategory";
 	}
 

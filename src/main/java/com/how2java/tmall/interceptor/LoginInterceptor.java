@@ -41,7 +41,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 "forereview",
                 "foredoreview"                 
         };
-		
+		//接下来就是为了获取当前的路径
 		HttpSession session=request.getSession();
 		//输出"/项目名称"
 		String contextPath=session.getServletContext().getContextPath();
@@ -50,9 +50,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 		//输出"资源名称"
 		uri=StringUtils.remove(uri, contextPath+"/");
 		String page=uri;
+		//如果输入url在需要登录的路径数组内
 		if(begingWith(page,requireAuthPages)) {
-			//进行登录
+			
 			Subject subject=SecurityUtils.getSubject();
+			//判定当前subject是否已经登录了
 			if(!subject.isAuthenticated()) {
 				response.sendRedirect("login");
                 return false;

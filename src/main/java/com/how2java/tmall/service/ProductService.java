@@ -36,10 +36,11 @@ public class ProductService  {
     @Autowired ReviewService reviewService;
     @Autowired ProductESDAO productESDAO;
     
-    //crud
+    
     @CacheEvict(allEntries=true)
     public void add(Product bean) {
         productDAO.save(bean);
+        //同步到es
         productESDAO.save(bean);
     }
     
@@ -75,7 +76,12 @@ public class ProductService  {
             fill(category);
         }
     }
+    //为一个目录填充好对应的产品，并将产品的第一个简单图片设置图片产品
     public void fill(Category category) {
+    	/**
+    	 * listByCategory()因为是同类方法，本来可以直接调用的，
+    	 * 但为了触发aop拦截才能走缓存，对于缓存管理的方法的调用，采用这种方法
+    	 */
     	ProductService productService=SpringContextUtil.getBean(ProductService.class);
         List<Product> products = productService.listByCategory(category);
         productImageService.setFirstProdutImages(products);
@@ -145,8 +151,10 @@ public class ProductService  {
      public void initDatabase2ES() {
     	 Pageable pageable = new PageRequest(0, 5);
     	 Page<Product> page=productESDAO.findAll(pageable);
+    	 //如果ESDAO查询的数据是空的
     	 if(page.getContent().isEmpty()) {
     		 List<Product> ps=productDAO.findAll();
+    		 //将dao取到的数据添加到es
     		 for(Product p:ps) {
     			 productESDAO.save(p);
     		 }

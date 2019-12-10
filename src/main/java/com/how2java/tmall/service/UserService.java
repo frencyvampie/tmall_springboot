@@ -43,6 +43,7 @@ public class UserService {
 	public boolean isExist(String name) {
 		UserService userService=SpringContextUtil.getBean(UserService.class);
 		User user=userService.getByName(name);
+		//这个有技巧的
 		return null!=user;
 	}
 	
